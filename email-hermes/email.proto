@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package email;
+
+option go_package = "email-service/proto";
+
+import "google/protobuf/timestamp.proto";
+
+// EmailRequest represents the request to send a templated email
+message EmailRequest {
+  string to = 1;              // Recipient email address
+  string subject = 2;         // Email subject
+  string template_id = 3;     // Template identifier
+  map<string, string> context = 4; // Template context data
+  string tenant_id = 5;       // Tenant identifier
+}
+
+// EmailResponse represents the response after queuing an email
+message EmailResponse {
+  string job_id = 1;          // Unique job identifier
+  string status = 2;          // Job status (e.g., "queued")
+  string message = 3;         // Status message
+  string queued_at = 4;       // ISO 8601 timestamp when queued
+}
+
+// HealthResponse represents the health check response
+message HealthResponse {
+  string status = 1;          // Health status (e.g., "healthy")
+  string timestamp = 2;       // ISO 8601 timestamp
+  string service = 3;         // Service name
+}
+
+// QueueStatusResponse represents the queue status information
+message QueueStatusResponse {
+  int32 queue_length = 1;     // Current queue length
+  string timestamp = 2;       // ISO 8601 timestamp
+  string status = 3;          // Operational status
+}
+
+// ServiceInfo represents basic API information
+message ServiceInfo {
+  string service = 1;         // Service name
+  string version = 2;         // Service version
+  string description = 3;     // Service description
+  map<string, string> endpoints = 4; // Available endpoints
+  string timestamp = 5;       // ISO 8601 timestamp
+}
+
+// ErrorResponse represents error information
+message ErrorResponse {
+  string error = 1;           // Error message
+  string code = 2;            // Error code
+  string details = 3;         // Additional error details
+}
+
+// EmailService provides gRPC methods for email operations
+service EmailService {
+  // SendEmail queues a templated email for processing
+  rpc SendEmail(EmailRequest) returns (EmailResponse);
+  
+  // HealthCheck returns the health status of the service
+  rpc HealthCheck(HealthCheckRequest) returns (HealthResponse);
+  
+  // GetQueueStatus returns current queue status information
+  rpc GetQueueStatus(QueueStatusRequest) returns (QueueStatusResponse);
+  
+  // GetServiceInfo returns basic information about the email service
+  rpc GetServiceInfo(ServiceInfoRequest) returns (ServiceInfo);
+}
+
+// Empty requests for simple endpoints
+message HealthCheckRequest {}
+message QueueStatusRequest {}
+message ServiceInfoRequest {}
