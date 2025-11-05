@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package billing;
 
-option go_package = "styx/proto/billing";
+option go_package = "github.com/DraconDev/protos/billing-styx";
 
 import "google/protobuf/timestamp.proto";
 
