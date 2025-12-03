@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package email;
 
-option go_package = "github.com/DraconDev/protos/email-hermes";
+option go_package = "email-service/proto";
 
 import "google/protobuf/timestamp.proto";
 
